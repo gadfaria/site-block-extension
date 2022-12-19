@@ -25,14 +25,15 @@ li:nth-child(even) {
 :root {
   --color-light: white;
   --color-dark: #212121;
-  --color-signal: #c61a09;
+  --color-signal: #f24b51;
   --color-background: var(--color-light);
   --color-text: var(--color-dark);
   --color-accent: var(--color-signal);
   --size-bezel: 0.5rem;
   --size-radius: 4px;
   line-height: 1.4;
-  font-family: "Inter", sans-serif;
+  /* font-family: "Inter", sans-serif; */
+  font-family: Verdana, sans-serif;
   /* font-size: calc(0.6rem + 0.4vw); */
   color: var(--color-text);
   background: var(--color-background);
@@ -62,21 +63,21 @@ body {
 h1,
 h2,
 h3 {
-  font-weight: 900;
+  /* font-weight: 900; */
   margin: 0;
 }
 
 ul {
   list-style-type: none;
   padding-inline-start: 0;
-  margin: 1rem 0;
+  /* margin: 1rem 0; */
 }
 
 li {
   padding: 0.25rem;
 }
 li:nth-child(odd) {
-  background-color: #c61a0930;
+  background-color: #f24b5130;
 }
 li:nth-child(even) {
   background: #ffffff;
@@ -116,22 +117,23 @@ li:nth-child(even) {
   top: 0;
   padding: calc(var(--size-bezel) * 0.75) calc(var(--size-bezel) * 0.5);
   margin: calc(var(--size-bezel) * 0.75 + 3px) calc(var(--size-bezel) * 0.5);
-  background: pink;
+  /* background: pink; */
   white-space: nowrap;
   transform: translate(0, 0);
   transform-origin: 0 0;
   background: var(--color-background);
   transition: transform 120ms ease-in;
-  font-weight: bold;
+  font-weight: 500;
   line-height: 1.2;
 }
+
 .input__field {
   box-sizing: border-box;
   display: block;
   width: 100%;
-  border: 3px solid currentColor;
+  border: 2px solid var(--color-dark);
   padding: calc(var(--size-bezel) * 1.5) var(--size-bezel);
-  color: currentColor;
+  color: var(--color-dark);
   background: transparent;
   border-radius: var(--size-radius);
 }
@@ -149,13 +151,21 @@ li:nth-child(even) {
 button {
   padding: var(--size-bezel) calc(var(--size-bezel) * 2);
   border: none;
-  border: 3px solid var(--color-signal);
+  border: 2px solid var(--color-signal);
   border-radius: var(--size-radius);
-  font-weight: 900;
+  /* font-weight: 900; */
+  font-weight: 500;
+  cursor: pointer;
+
+  transition: all 120ms ease-in;
+}
+
+button:hover{
+  opacity: 0.8;
 }
 
 button[type="reset"] {
-  color: currentColor;
+  color: var(--color-signal);
   background: var(--color-background);
 }
 
