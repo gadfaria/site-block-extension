@@ -7,31 +7,45 @@
     <link rel="stylesheet" href="./popup.css" />
   </head>
   <body>
-    <template id="li_template">
+    <!-- <template id="li_template">
       <li>
         <a>
           <h3 class="title">Tab Title</h3>
           <p class="pathname">Tab Pathname</p>
         </a>
       </li>
-    </template>
+    </template> -->
 
+    <!-- <h1>BlockSite Gabiru</h1>
     <h3>Sites:</h3>
     <ul id="site-list"></ul>
 
-    <form id="add-site-form">
-      <div class="form-group" id="form">
-        <input
-          type="text"
-          class="form-control"
-          id="add-site-input"
-          placeholder="Some site to add"
-        />
+    <form id="form">
+      <input
+        type="text"
+        id="input"
+        placeholder="Some site to add"
+      />
+      <div id="buttons">
+        <button id="add" type="submit">Add</button>
+        <button id="clear" type="reset">Clear</button>
       </div>
-      <button type="submit">Add</button>
-    </form>
+    </form> -->
 
-    <button id="clear">Clear</button>
+    <h1>BlockSite Gabiru</h1>
+
+    <form id="form" class="card">
+      <h2>Sites</h2>
+      <ul id="site-list"></ul>
+      <label class="input">
+        <input id="input" class="input__field" type="text" placeholder=" " />
+        <span class="input__label">URL</span>
+      </label>
+      <div class="button-group">
+        <button id="add" type="submit">Send</button>
+        <button id="clear" type="reset">Clear</button>
+      </div>
+    </form>
 
     <script src="./popup.js" type="module"></script>
   </body>

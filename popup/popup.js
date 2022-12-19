@@ -5,8 +5,6 @@ let blockedSites = [];
 
 let sites = document.getElementById("site-list");
 
-const button = document.getElementById("clear");
-
 // Initialize the form with the user's option settings
 chrome.storage.sync.get("blockedSites", (data) => {
   blockedSites = [...(data?.blockedSites || [])];
@@ -18,22 +16,37 @@ chrome.storage.sync.get("blockedSites", (data) => {
   });
 });
 
-button.addEventListener("click", async () => {
+const form = document.getElementById("form");
+
+form.addEventListener("submit", function (e) {
+  // Send the query from the form to the background page.
+  const value = document.getElementById("input").value;
+  blockedSites = [...blockedSites, value];
+  chrome.storage.sync.set({ blockedSites });
+
+  let li = document.createElement("li");
+  li.innerText = value;
+
+  // li.innerHTML += `<button class="remove">Remove</button>`;
+  sites.appendChild(li);
+
+  e.preventDefault();
+});
+
+form.addEventListener("reset", function (e) {
   chrome.storage.sync.set({ blockedSites: [] });
 });
 
-document
-  .getElementById("add-site-form")
-  .addEventListener("submit", function (e) {
-    console.log("gabiruu");
-    // Send the query from the form to the background page.
-    const value = document.getElementById("add-site-input").value;
-    blockedSites = [...blockedSites, value];
-    chrome.storage.sync.set({ blockedSites });
+document.addEventListener("input", (e) => {
+  const el = e.target;
 
-    let li = document.createElement("li");
-    li.innerText = value;
-    sites.appendChild(li);
-
-    e.preventDefault();
-  });
+  if (el.matches("[data-color]")) {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      document.documentElement.style.setProperty(
+        `--color-${el.dataset.color}`,
+        el.value
+      );
+    }, 100);
+  }
+});
