@@ -74,11 +74,12 @@ ul {
   font-size: 14px;
   font-weight: 500;
   /* margin: 1rem 0; */
+  margin: 0.5rem 0;
 }
 
 li {
-  padding: 0.25rem;
-  width: 100%;
+  padding: 0.25rem 0.5rem;
+  /* width: 100%; */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -91,11 +92,11 @@ li:nth-child(even) {
 }
 
 .remove {
-  padding: 0 0.5rem;
+  /* padding: 0 0.5rem; */
   color: #f24b51;
   cursor: pointer;
 
-  transition: all 120ms ease-in;
+  transition: all 0.2s ease-in;
 }
 
 .remove:hover {
@@ -105,7 +106,7 @@ li:nth-child(even) {
 .form {
   background: var(--color-background);
   /* padding: calc(4 * var(--size-bezel)); */
-  /* margin-top: calc(4 * var(--size-bezel)); */
+  margin-top: calc(1 * var(--size-bezel));
   border-radius: var(--size-radius);
   /* border: 3px solid var(--color-shadow, currentColor); */
   /* box-shadow: 0.5rem 0.5rem 0 var(--color-shadow, currentColor); */
@@ -115,6 +116,7 @@ li:nth-child(even) {
   color: var(--color-light);
   --color-shadow: var(--color-accent);
 }
+
 .form--accent {
   --color-background: var(--color-signal);
   --color-accent: var(--color-light);
@@ -155,6 +157,8 @@ li:nth-child(even) {
   color: var(--color-dark);
   background: transparent;
   border-radius: var(--size-radius);
+
+  transition: all 0.2s ease-in;
 }
 
 .input__field:focus {
@@ -167,8 +171,6 @@ li:nth-child(even) {
   transform: translate(0.25rem, -65%) scale(0.8);
   color: var(--color-accent);
 }
-
-
 
 .button-group {
   margin-top: calc(var(--size-bezel) * 2.5);
@@ -183,10 +185,10 @@ button {
   font-weight: 500;
   cursor: pointer;
 
-  transition: all 120ms ease-in;
+  transition: all 0.2s ease-in;
 }
 
-button:hover{
+button:hover {
   opacity: 0.8;
 }
 
