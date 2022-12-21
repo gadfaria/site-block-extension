@@ -70,11 +70,18 @@ h3 {
 ul {
   list-style-type: none;
   padding-inline-start: 0;
+
+  font-size: 14px;
+  font-weight: 500;
   /* margin: 1rem 0; */
 }
 
 li {
   padding: 0.25rem;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 li:nth-child(odd) {
   background-color: #f24b5130;
@@ -83,7 +90,19 @@ li:nth-child(even) {
   background: #ffffff;
 }
 
-.card {
+.remove {
+  padding: 0 0.5rem;
+  color: #f24b51;
+  cursor: pointer;
+
+  transition: all 120ms ease-in;
+}
+
+.remove:hover {
+  opacity: 0.5;
+}
+
+.form {
   background: var(--color-background);
   /* padding: calc(4 * var(--size-bezel)); */
   /* margin-top: calc(4 * var(--size-bezel)); */
@@ -91,17 +110,17 @@ li:nth-child(even) {
   /* border: 3px solid var(--color-shadow, currentColor); */
   /* box-shadow: 0.5rem 0.5rem 0 var(--color-shadow, currentColor); */
 }
-.card--inverted {
+.form--inverted {
   --color-background: var(--color-dark);
   color: var(--color-light);
   --color-shadow: var(--color-accent);
 }
-.card--accent {
+.form--accent {
   --color-background: var(--color-signal);
   --color-accent: var(--color-light);
   color: var(--color-dark);
 }
-.card *:first-child {
+.form *:first-child {
   margin-top: 0;
 }
 .l-design-widht {
@@ -138,11 +157,18 @@ li:nth-child(even) {
   border-radius: var(--size-radius);
 }
 
+.input__field:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
 .input__field:focus + .input__label,
 .input__field:not(:placeholder-shown) + .input__label {
   transform: translate(0.25rem, -65%) scale(0.8);
   color: var(--color-accent);
 }
+
+
 
 .button-group {
   margin-top: calc(var(--size-bezel) * 2.5);
