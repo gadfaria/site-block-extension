@@ -1,22 +1,13 @@
 let blockedSites = [];
 
-function initStorageCache() {
-  chrome.storage.sync.get("blockedSites", (data) => {
-    if (data?.blockedSites) {
-      blockedSites = data.blockedSites;
-    }
-  });
-}
-
-function init() {
-  initStorageCache();
-}
-
-init();
+chrome.storage.sync.get("blockedSites", (data) => {
+  if (data?.blockedSites) {
+    blockedSites = data.blockedSites;
+  }
+});
 
 chrome.storage.onChanged.addListener(function (changes, namespace) {
   if (changes.blockedSites) {
-    console.log("blockedSites changed", changes.blockedSites.newValue);
     blockedSites = changes.blockedSites.newValue;
   }
 });

@@ -8,32 +8,6 @@
   </head>
 
   <body>
-    <!-- <template id="li_template">
-      <li>
-        <a>
-          <h3 class="title">Tab Title</h3>
-          <p class="pathname">Tab Pathname</p>
-        </a>
-      </li>
-    </template> -->
-
-    <!-- <h1>BlockSite Gabiru</h1>
-    <h3>Sites:</h3>
-    <ul id="site-list"></ul>
-
-    <form id="form">
-      <input
-        type="text"
-        id="input"
-        placeholder="Some site to add"
-      />
-      <div id="buttons">
-        <button id="add" type="submit">Add</button>
-        <button id="clear" type="reset">Clear</button>
-      </div>
-    </form> -->
-
-    <!-- <h1>BlockSite Gabiru</h1> -->
     <svg
       width="203"
       height="40"
@@ -51,14 +25,15 @@
       />
     </svg>
 
-    <form id="form" class="form">
-      <h2>Sites</h2>
-      <ul id="list" class="list"></ul>
-      <label class="input">
-        <input id="input" class="input__field" type="text" placeholder=" " />
-        <span class="input__label">URL</span>
-      </label>
-      <div class="button-group">
+    <h2>Sites</h2>
+    <ul id="sites"></ul>
+
+    <form id="form">
+      <div id="field">
+        <input id="field__input" type="text" placeholder=" " />
+        <span id="field__label">URL</span>
+      </div>
+      <div id="buttons">
         <button id="add" type="submit">Send</button>
         <button id="clear" type="reset">Clear</button>
       </div>
