@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Block Sites Extensions",
+  "name": "SiteBlock",
   "description": "An extension to block sites and help you stay focused",
   "version": "1.0",
   "action": {

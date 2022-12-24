@@ -27,7 +27,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     });
 
     if (hasBlockedSite) {
-      chrome.tabs.update(tab.id, { url: "images/saidaqui.png" });
+      chrome.tabs.update(tab.id, { url: "images/nottoday.jpg" });
     }
   }
 });

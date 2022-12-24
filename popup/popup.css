@@ -280,3 +280,9 @@ button:active {
 button + button {
   margin-left: calc(var(--size-bezel) * 2);
 }
+
+#version {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+}
