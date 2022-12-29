@@ -1,11 +1,16 @@
 {
   "manifest_version": 3,
   "name": "SiteBlock",
-  "description": "An extension to block sites and help you stay focused",
+  "description": "An extension that blocks sites and helps you focus.",
   "version": "1.0",
+  "icons": {
+    "16": "./images/icon16.png",
+    "32": "./images/icon32.png",
+    "48": "./images/icon48.png",
+    "128": "./images/icon128.png"
+  },
   "action": {
-    "default_popup": "./popup/popup.html",
-    "default_icon": "./images/icon.png"
+    "default_popup": "./popup/popup.html"
   },
   "background": {
     "service_worker": "background.js"
