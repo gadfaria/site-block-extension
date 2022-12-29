@@ -10,6 +10,8 @@ An extension that blocks sites and helps you focus.
 
 * On Chrome, install via [Chrome Web Store](https://chrome.google.com/webstore/detail/siteblock/piepfdhhijbhafaiefdpimdnfgndjpli?hl=en&authuser=0)
 * On Firefox, not yet published
+
+
 ![Image](https://lh3.googleusercontent.com/FF68Pi35YC2lkn5ylmaMMhNHXM-Hky1IsYsk3WkK_NgtLEXEVHcEtSgUu-rJmyy83GTo3keVNMndAUFg49AoI2S9mg=w640-h400-e365-rj-sc0x00ffffff)
 
 
