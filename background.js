@@ -27,7 +27,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     });
 
     if (hasBlockedSite) {
-      chrome.tabs.update(tab.id, { url: "images/nottoday.jpg" });
+      chrome.tabs.update(tab.id, { url: "https://not-today.gadfaria.com/" });
     }
   }
 });
