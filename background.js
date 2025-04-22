@@ -2,6 +2,10 @@ let blockedSites = [];
 let enabled = false;
 
 chrome.runtime.onInstalled.addListener(async () => {
+  const data = await chrome.storage.sync.get(["blockedSites", "enabled"]);
+  blockedSites = data.blockedSites || [];
+  enabled = data.enabled !== undefined ? data.enabled : false;
+
   renderContextMenu();
 });
 
@@ -10,20 +14,20 @@ chrome.contextMenus.onClicked.addListener((item, tab) => {
     case "enable/disable":
       enabled = !enabled;
       chrome.storage.sync.set({ enabled });
-      return;
+      break;
     case "block":
-      const url = new URL(tab.url).hostname;
-      chrome.storage.sync.set({ blockedSites: [...blockedSites, url] });
-      return;
+      try {
+        const url = new URL(tab.url);
+        const domain = url.hostname;
+
+        if (!blockedSites.includes(domain)) {
+          chrome.storage.sync.set({ blockedSites: [...blockedSites, domain] });
+        }
+      } catch (error) {
+        console.error("Invalid URL:", error);
+      }
+      break;
   }
-});
-
-chrome.storage.sync.get("blockedSites", (data) => {
-  if (data.blockedSites) blockedSites = data.blockedSites;
-});
-
-chrome.storage.sync.get("enabled", (data) => {
-  enabled = data.enabled;
 });
 
 chrome.storage.onChanged.addListener(function (changes, namespace) {
@@ -40,16 +44,44 @@ chrome.storage.onChanged.addListener(function (changes, namespace) {
   }
 });
 
+chrome.storage.sync.get(["blockedSites", "enabled"], (data) => {
+  if (data.blockedSites) blockedSites = data.blockedSites;
+  if (data.enabled !== undefined) enabled = data.enabled;
+});
+
 chrome.tabs.onUpdated.addListener(function (_, changeInfo, tab) {
   if (!changeInfo?.url || !enabled) return;
 
-  const hasBlockedSite = blockedSites.some((site) => {
-    return changeInfo.url.includes(site);
-  });
+  const hasBlockedSite = isBlockedURL(changeInfo.url);
 
   if (hasBlockedSite)
     chrome.tabs.update(tab.id, { url: "https://not-today.gadfaria.com/" });
 });
+
+function isBlockedURL(urlString) {
+  try {
+    const url = new URL(urlString);
+    const hostname = url.hostname;
+    const fullUrl = urlString.toLowerCase();
+
+    return blockedSites.some((blockedItem) => {
+      const item = blockedItem.toLowerCase();
+
+      if (hostname === item || hostname.endsWith("." + item)) {
+        return true;
+      }
+
+      if (hostname.includes(item) || fullUrl.includes(item)) {
+        return true;
+      }
+
+      return false;
+    });
+  } catch (e) {
+    console.error("Error parsing URL:", e);
+    return false;
+  }
+}
 
 function renderContextMenu() {
   chrome.contextMenus.removeAll(() => {
@@ -76,18 +108,17 @@ function renderContextMenu() {
 }
 
 function checkAllTabsURL() {
+  if (!enabled || !blockedSites.length) return;
+
   chrome.tabs.query({}, function (tabs) {
     tabs.forEach((tab) => {
-      if (!enabled || !blockedSites.length || !tab.url) return;
+      if (!tab.url) return;
 
-      const hasBlockedSite = blockedSites.some((site) => {
-        return tab.url.includes(site);
-      });
-
-      if (hasBlockedSite)
+      if (isBlockedURL(tab.url)) {
         chrome.tabs.update(tab.id, {
           url: "https://not-today.gadfaria.com/",
         });
+      }
     });
   });
 }

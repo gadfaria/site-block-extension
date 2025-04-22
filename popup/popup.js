@@ -21,46 +21,70 @@ setTimeout(() => {
 
 // Get the current tab's URL
 async function getCurrentUrl() {
-  let queryOptions = { active: true, lastFocusedWindow: true };
-  // `tab` will either be a `tabs.Tab` instance or `undefined`
-  let [tab] = await chrome.tabs.query(queryOptions);
-
-  return tab?.url ? new URL(tab.url).hostname : "";
-  ƒ;
+  try {
+    let queryOptions = { active: true, lastFocusedWindow: true };
+    let [tab] = await chrome.tabs.query(queryOptions);
+    return tab?.url ? new URL(tab.url).hostname : "";
+  } catch (error) {
+    console.error("Error getting current URL:", error);
+    return "";
+  }
 }
 
-// Remove a site from the list by clicking on remove button
-function removeSite(e) {
-  const site = e.target.previousSibling.innerText;
+function createSiteListItem(site) {
+  let li = document.createElement("li");
+  li.innerHTML = `<span>${site}</span><div id="list__remove" title="Remove site">${TRASH_ICON}</div>`;
 
+  const removeButton = li.querySelector("#list__remove");
+  removeButton.addEventListener("click", function () {
+    removeSite(site, li);
+  });
+
+  return li;
+}
+
+function removeSite(site, listItem) {
   blockedSites = blockedSites.filter((s) => s !== site);
   chrome.storage.sync.set({ blockedSites });
-
-  e.target.parentNode.remove();
+  listItem.remove();
 }
 
-// Open the popup's with current tab's URL
-textInput.value = await getCurrentUrl();
+function isValidUrl(url) {
+  try {
+    return /^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/i.test(url);
+  } catch (error) {
+    return false;
+  }
+}
 
-// Update the user's option settings
+function isValidInput(input) {
+  input = input.trim();
+
+  if (!input) return false;
+
+  if (input.length >= 2) return true;
+
+  return false;
+}
+
+(async function init() {
+  textInput.value = await getCurrentUrl();
+
+  chrome.storage.sync.get("blockedSites", (data) => {
+    blockedSites = [...(data?.blockedSites || [])];
+
+    blockedSites.forEach((site) => {
+      sites.appendChild(createSiteListItem(site));
+    });
+  });
+
+  chrome.storage.sync.get("enabled", (data) => {
+    switchInput.checked = data.enabled || false;
+  });
+})();
+
 switchInput.addEventListener("change", function (e) {
   chrome.storage.sync.set({ enabled: e.target.checked });
-});
-
-// Initialize the form with the user's option settings
-chrome.storage.sync.get("blockedSites", (data) => {
-  blockedSites = [...(data?.blockedSites || [])];
-
-  blockedSites.forEach((site) => {
-    let li = document.createElement("li");
-    li.innerHTML += `<span>${site}</span><div id="list__remove">${TRASH_ICON}</div>`;
-    li.addEventListener("click", removeSite);
-    sites.appendChild(li);
-  });
-});
-
-chrome.storage.sync.get("enabled", (data) => {
-  switchInput.checked = data.enabled;
 });
 
 form.addEventListener("reset", function (e) {
@@ -69,20 +93,26 @@ form.addEventListener("reset", function (e) {
 });
 
 form.addEventListener("submit", function (e) {
-  // Send the query from the form to the background page.
-  if (!textInput.value) return;
+  e.preventDefault();
 
-  blockedSites = [...blockedSites, textInput.value];
+  const input = textInput.value.trim();
+  if (!input) return;
+
+  if (!isValidInput(input)) {
+    alert("Please enter a valid domain or keyword (at least 2 characters)");
+    return;
+  }
+
+  if (blockedSites.includes(input)) {
+    alert("This site or keyword is already blocked");
+    return;
+  }
+
+  blockedSites = [...blockedSites, input];
   chrome.storage.sync.set({ blockedSites });
 
   // Add the site to the list
-  let li = document.createElement("li");
-  li.innerHTML += `<span>${textInput.value}</span><div id="list__remove">${TRASH_ICON}</div>`;
-  li.addEventListener("click", removeSite);
+  sites.appendChild(createSiteListItem(input));
 
   textInput.value = "";
-
-  sites.appendChild(li);
-
-  e.preventDefault();
 });
