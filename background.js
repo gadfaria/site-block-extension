@@ -9,11 +9,28 @@ chrome.runtime.onInstalled.addListener(async () => {
   renderContextMenu();
 });
 
+// Add password verification in context menu
 chrome.contextMenus.onClicked.addListener((item, tab) => {
   switch (item.menuItemId) {
     case "enable/disable":
-      enabled = !enabled;
-      chrome.storage.sync.set({ enabled });
+      // If disabling, check if password protected
+      if (enabled) {
+        chrome.storage.sync.get("passwordHash", (data) => {
+          if (data.passwordHash) {
+            // If password protected, open popup for verification
+            chrome.action.openPopup();
+            return;
+          }
+          
+          // If no password, disable normally
+          enabled = false;
+          chrome.storage.sync.set({ enabled });
+        });
+      } else {
+        // Enabling always works without password
+        enabled = true;
+        chrome.storage.sync.set({ enabled });
+      }
       break;
     case "block":
       try {
