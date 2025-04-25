@@ -83,7 +83,10 @@ setTimeout(() => {
 async function getCurrentUrl() {
   try {
     // With host permissions, we can still get the active tab URL
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    const [tab] = await chrome.tabs.query({
+      active: true,
+      currentWindow: true,
+    });
     return tab?.url ? new URL(tab.url).hostname : "";
   } catch (error) {
     console.error("Error getting current URL:", error);
@@ -334,6 +337,8 @@ switchInput.addEventListener("change", async function (e) {
 
 // Modify form reset to verify password
 form.addEventListener("reset", async function (e) {
+  if (blockedSites.length === 0) return;
+
   if (passwordProtected) {
     e.preventDefault();
 
@@ -341,13 +346,19 @@ form.addEventListener("reset", async function (e) {
 
     if (passwordValid) {
       chrome.storage.sync.set({ blockedSites: [] });
-      sites.innerHTML = "";
+      // Remove all items except the empty message
+      const items = sites.querySelectorAll("li:not(#empty-list-message)");
+      items.forEach((item) => item.remove());
       document.getElementById("empty-list-message").style.display = "block";
+      blockedSites = [];
     }
   } else {
     chrome.storage.sync.set({ blockedSites: [] });
-    sites.innerHTML = "";
+    // Remove all items except the empty message
+    const items = sites.querySelectorAll("li:not(#empty-list-message)");
+    items.forEach((item) => item.remove());
     document.getElementById("empty-list-message").style.display = "block";
+    blockedSites = [];
   }
 });
 
