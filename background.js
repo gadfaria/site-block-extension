@@ -124,6 +124,8 @@ function renderContextMenu() {
   });
 }
 
+// These functions can still work with just host permissions
+// because we have http://*/* and https://*/* in host_permissions
 function checkAllTabsURL() {
   if (!enabled || !blockedSites.length) return;
 

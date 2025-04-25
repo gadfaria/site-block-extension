@@ -79,11 +79,11 @@ setTimeout(() => {
   loading.remove();
 }, 500);
 
-// Get the current tab's URL
+// Get the current tab's URL using host permissions instead of tabs API
 async function getCurrentUrl() {
   try {
-    let queryOptions = { active: true, lastFocusedWindow: true };
-    let [tab] = await chrome.tabs.query(queryOptions);
+    // With host permissions, we can still get the active tab URL
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     return tab?.url ? new URL(tab.url).hostname : "";
   } catch (error) {
     console.error("Error getting current URL:", error);
