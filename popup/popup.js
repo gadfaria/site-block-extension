@@ -19,6 +19,62 @@ const textInput = document.getElementById("block-input");
 const switchInput = document.getElementById("switch__input");
 const loading = document.getElementById("loading");
 
+// Toast notification system
+const ToastModule = {
+  show: function (message, type = "info", duration = 3000) {
+    try {
+      // Remove existing toast if any
+      const existingToast = document.getElementById("toast-container");
+      if (existingToast) {
+        document.body.removeChild(existingToast);
+      }
+
+      // Create toast container
+      const toast = document.createElement("div");
+      toast.id = "toast-container";
+      toast.className = `toast ${type}`;
+      toast.textContent = message;
+
+      // Add to DOM
+      document.body.appendChild(toast);
+
+      // Force reflow and add visible class
+      toast.offsetHeight;
+      toast.classList.add("visible");
+
+      // Remove after duration
+      setTimeout(() => {
+        toast.classList.remove("visible");
+        setTimeout(() => {
+          if (toast.parentNode) {
+            document.body.removeChild(toast);
+          }
+        }, 300);
+      }, duration);
+    } catch (error) {
+      console.error("Error showing toast:", error);
+      // Fallback to alert if toast fails
+      alert(message);
+    }
+  },
+
+  info: function (message, duration) {
+    this.show(message, "info", duration);
+  },
+
+  success: function (message, duration) {
+    this.show(message, "success", duration);
+  },
+
+  error: function (message, duration) {
+    this.show(message, "error", duration);
+  },
+
+  warning: function (message, duration) {
+    this.show(message, "warning", duration);
+  },
+};
+
 setTimeout(() => {
   loading.remove();
 }, 500);
@@ -164,7 +220,7 @@ function showPasswordPrompt() {
           container.classList.remove("shake");
         }, 500);
 
-        alert("Incorrect password");
+        ToastModule.error("Incorrect password");
         input.value = "";
         input.focus();
       }
@@ -345,12 +401,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const confirmPassword = confirmPasswordInput.value;
 
     if (!newPassword || !confirmPassword) {
-      alert("Please fill in both password fields.");
+      ToastModule.error("Please fill in both password fields.");
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      alert("Passwords don't match!");
+      ToastModule.error("Passwords don't match!");
       return;
     }
 
@@ -367,7 +423,7 @@ document.addEventListener("DOMContentLoaded", () => {
     passwordProtected = true;
     updatePasswordUI();
 
-    alert("Password set successfully!");
+    ToastModule.success("Password set successfully!");
     // Close modal and clear fields
     passwordModal.style.display = "none";
     newPasswordInput.value = "";
@@ -387,7 +443,7 @@ document.addEventListener("DOMContentLoaded", () => {
     passwordProtected = false;
     updatePasswordUI();
 
-    alert("Password removed successfully!");
+    ToastModule.success("Password removed successfully!");
     // Close the modal
     passwordModal.style.display = "none";
   });
@@ -400,12 +456,14 @@ form.addEventListener("submit", function (e) {
   if (!input) return;
 
   if (!isValidInput(input)) {
-    alert("Please enter a valid domain or keyword (at least 2 characters)");
+    ToastModule.error(
+      "Please enter a valid domain or keyword (at least 2 characters)"
+    );
     return;
   }
 
   if (blockedSites.includes(input)) {
-    alert("This site or keyword is already blocked");
+    ToastModule.error("This site or keyword is already blocked");
     return;
   }
 
